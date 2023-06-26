@@ -1,19 +1,26 @@
 import generateToken from "../database/token.js";
 import asyncHandler from "express-async-handler";  //PACKAGE
  import User from "../models/userSchema.js";
-const Registeruser=asyncHandler(async (req,res)=>{   
+const Registeruser=asyncHandler(async (req,res)=>{  
+    console.log("register user"); 
     const {name,email,password,pic}=req.body;
+    console.log("test 1"); 
     if(!name || !password || !email){
+        console.log("test 2"); 
         res.status(400);
-        throw new Error("PLEASE ENTER CORRECT DETAILS");
+        throw new Error("PLEASE ENTER ALL DETAILS");
     }
     const userExist =await User.findOne({email});
+    console.log("test 3"); 
     if(userExist){
-        res.status(400);
-         throw new Error("User already registered");
+        res.status(400).json("User already registered");
+        console.log("test 4"); 
+        return ;
     }
+    console.log("test 7"); 
     const newuser=new User({name,email,password,pic});
-    newuser.save()
+    await newuser.save()
+    console.log("test 5"); 
     // .then(() => console.log('User saved successfully'))
     // .catch((error) => {
     //     if (error.code === 11000) {
@@ -24,14 +31,16 @@ const Registeruser=asyncHandler(async (req,res)=>{
     //     }
     // });
     console.log(newuser);
+     console.log("-----------------------------------------------------------------");
     if(newuser){
-        res.status(201).json({
+        return res.status(201).json({
             _id:newuser._id,            
             name:newuser.name,
             email:newuser.email,
             token:generateToken(newuser._id),
             pic:newuser.pic
         });
+        console.log(">>>>>done");
     }
     else{
         res.status(400);
@@ -40,10 +49,12 @@ const Registeruser=asyncHandler(async (req,res)=>{
 })
 
 const authdetails=async(req,res)=>{
+    console.log("authenticate user"); 
     const {email,password}=req.body;
-    const userexist=User.findOne({email});
+    const userexist=await User.findOne({email});
+    console.log(userexist);
     if(userexist){ //verify whether password is also same by decrypting it.
-        res.json({
+        res.status(200).json({
            _id:userexist._id,
             name:userexist.name,
             email:userexist.email,
@@ -52,11 +63,15 @@ const authdetails=async(req,res)=>{
         })
     }
     else{
-        res.status(400);
-        throw new Error("Enter correct details");
+        
+        console.log("t1")
+        res.status(401).json("Failed to login");
+        console.log("t2")
+        console.log("t3")
     }
 }
 const allUsers=asyncHandler(async(req,res)=>{
+    console.log("get all user"); 
     const keyword=req.query.search?{
         $or :[
             {name:{$regex:req.query.search,$options:"i"}}, {email:{$regex:req.query.search,$options:"i"}},

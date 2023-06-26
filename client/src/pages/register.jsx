@@ -25,7 +25,15 @@ const Register=()=>{
         console.log("handing submit");
         setloading(true);
         if(!name || !email || !password){
-            toast('Please fill in the details ');   
+            toast.warning('Please fill in the details', {
+            position: 'top',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
             setloading(false);
            return ; 
         }
@@ -35,13 +43,32 @@ const Register=()=>{
                 headers:{"Content-Type":"application/json",},
             };
              console.log("test-");
-            const {data}=await axios.post("/api/user",{name,email,password,pic},config);
             
+            const data=await axios.post("/api/user/",{name:name,email:email,password:password,pic:pic},config);
+             toast.warning('waiting for submission', {
+            position: 'top',
+            autoClose: 12000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
+            // console.log("data is",data);
              console.log("test1");
+        
           //  localStorage.setItem("userInfo",JSON.stringify(data));
             
              console.log("test2");
-            toast("registration successful");
+           toast.warning('REGISTRATION SUCCESSFUL', {
+            position: 'top',
+            autoClose: 12000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
             
              console.log("test4");
              navigate("/chat");
@@ -49,7 +76,15 @@ const Register=()=>{
         }
         catch(error){
             console.log(error.message);
-            toast("Error occured");
+             toast.error('Error Occurred', {
+            position: 'top-right',
+            autoClose: 8000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
         }
     };
     const postdetails=async(pic)=>{
@@ -79,7 +114,6 @@ const Register=()=>{
     }
     return(
         <div style={styles}>
-            <ToastContainer/>
             <form style={{backgroundColor:"white", border:"2px solid black",padding:"20px",
     borderRadius:"5%"}}>
             <h1 style={{textAlign:'center',fontFamily:"cursive"}} >Welcome</h1>
@@ -89,9 +123,8 @@ const Register=()=>{
             <input style={{margin:"2px",display:"none"}}  type="file" accept='image/' id="image" onChange={(e)=>postdetails(e.target.files[0])}/>
             <label htmlFor="image" style={{display:"flex",color:"cyan"}}><img style={{width:"30px",height:"30px",borderRadius:"20%",padding:"0 2px"}} src="https://media.gettyimages.com/vectors/camera-vector-illustration-vector-id466881028?b=1&k=6&m=466881028&s=170x170&h=EikGCs9NUn4pIBLV3ljW3ImXkbb0TK8hnI_dfI92E9Y=" alt='img'></img> Add an avatar</label>
             <button style={{margin:"10px auto 10px auto ",display:"flex",flexDirection:"column",alignItems:"center",background:"cyan"}} onClick={submitHandler} >Sign Up</button>
-             <p> You do have an account?  <Link to="/Login">Login</Link></p>           
+             <p> You do have an account?  <Link to="/login">Login</Link></p>           
             </form>
-           <ToastContainer position="top-center" autoClose={100000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="colored" />
          </div>
     )   
 };
