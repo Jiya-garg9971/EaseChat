@@ -1,131 +1,143 @@
-import Input from '@mui/joy/Input';
-import Login from './login';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-import { useNavigate, Link} from "react-router-dom";
-import { useState,useEffect } from 'react';
-const Register=()=>{
-   // console.log("hey");
-    let styles={
-        display:"flex",
-        alignItems:"center",
-        justifyContent:"center",
-        margin:"auto ",
-        padding:"3%",
-        alignContent:'center'
-    }   
+import React, { useRef } from 'react'
+import styled from 'styled-components';
+import {useNavigate} from 'react-router';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const Container=styled.div`
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background-color:#F0F8FF;
+    width:100vw;
+    height:100vh;
+   font-family: 'Poppins', sans-serif;
+`
+const Wrapper=styled.div`
+    display:flex;
+    flex-direction:column;
+     margin:30px;
+     width:50vw;
+     height:100vh;
+`
+const Wrapper2=styled.div`
+    display:flex;
+    justify-content:center;
+    align-items:center;
+     
+     border-radius:10px;
+     width:24vw;
+     min-height:30vh;
+     padding:20px 40px;
+     background-color:white;
+`
+const Heading=styled.h1`
+    font-size:4rem;
+    color:#1877F2;
+    text-align:left;
+    margin-bottom:0px;
+`
+const Content=styled.span`
+    margin-top:0px;
+    font-size:1.5rem;
+    text-align:left;
+`
+const Input=styled.input`
+    border:2px solid lightgrey;
+    width:100%;
+    padding:10px;
+    font-size:20px;
+    border-radius:10px;
+    margin:10px 2px;
+`
+const Button=styled.button`
+width:100%;
+border:none;
+padding:10px;
+    border-radius:10px;
+    background-color:#1877F2;
+    color:white;
+    font-size:15px;
+    font-weight:bolder;
+    margin:10px;
+`
+const Btn=styled.button`
+    width:90%;
+    padding:10px;
+    border-radius:10px;
+    background-color: #0BDA51;
+    color:white;
+    font-weight:bolder;
+    border:none;
+    font-size:15px;
+`
+
+const Form=styled.form`
+    display:flex;
+    min-width:100%;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+`
+const Register = () => {
+    const username=useRef();
+    const email=useRef();
+    const password=useRef();
+    const passwordconfirm=useRef();
     const navigate=useNavigate();
-    const [name,setname]=useState();
-    const [email,setemail]=useState();
-    const [password,setpassword]=useState();
-    const [loading,setloading]=useState(false);
-    const [pic,setpic]=useState();
-    const submitHandler=async()=>{
-        console.log("handing submit");
-        setloading(true);
-        if(!name || !email || !password){
-            toast.warning('Please fill in the details', {
-            position: 'top',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            });
-            setloading(false);
-           return ; 
-        }
-        console.log(name, email, password, pic);
+   const handleSubmit = async (e) => {
+        console.log("handle submit");
+        e.preventDefault();    
+        const user = {
+            name: username.current.value,
+            email: email.current.value,
+            password: password.current.value,
+        };
         try{
-            const config={
-                headers:{"Content-Type":"application/json",},
-            };
-             console.log("test-");
+            const res = await axios.post("/api/user", user);
             
-            const data=await axios.post("/api/user/",{name:name,email:email,password:password,pic:pic},config);
-             toast.warning('waiting for submission', {
-            position: 'top',
-            autoClose: 12000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            });
-            // console.log("data is",data);
-             console.log("test1");
-        
-          //  localStorage.setItem("userInfo",JSON.stringify(data));
+            toast.success("Registeation Successfull");
+        localStorage.setItem("userInfo", JSON.stringify(res));
+            console.log(res);
             
-             console.log("test2");
-           toast.warning('REGISTRATION SUCCESSFUL', {
-            position: 'top',
-            autoClose: 12000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            });
-            
-             console.log("test4");
-             navigate("/chat");
-             console.log("navigated");
+            navigate("/chat");
         }
-        catch(error){
-            console.log(error.message);
-             toast.error('Error Occurred', {
-            position: 'top-right',
-            autoClose: 8000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            });
+        catch(err){
+            console.log(err.response.data);
+            toast.warning(err.response.data);
+            return;
         }
     };
-    const postdetails=async(pic)=>{
-        console.log(pic);
-        if(pic.type==="image/jpeg" || pic.type==="image/png"){
-            const data=new FormData();  //to deal with the form
-            data.append("file",pic);
-            data.append("upload_preset","chatapp");
-            data.append("cloud_name","dtqwwb1ou");
-           await fetch("https://api.cloudinary.com/v1_1/dtqwwb1ou/image/upload",{method:"post",body:data,}).then((res)=>res.json()).then(data=>{
-                console.log(data.url);
-                setpic(data.url.toString());
-                setloading(false);
-           })
-            .catch((err)=>{
-                console.log(err);
-                setloading(false);
-            });
-            console.log("photo uploaded");
-        }
-        else{
-           console.log("wrong image selected");
-            toast("their is an error while selecting the image");
-            setloading(false);
-            return ;
-        }
-    }
-    return(
-        <div style={styles}>
-            <form style={{backgroundColor:"white", border:"2px solid black",padding:"20px",
-    borderRadius:"5%"}}>
-            <h1 style={{textAlign:'center',fontFamily:"cursive"}} >Welcome</h1>
-            <Input style={{margin:"2px"}}  type="name"  placeholder="Name" onChange={(e)=>{console.log(e.target.value); setname(e.target.value)}}/>
-            <Input style={{margin:"2px"}}  type="email"  placeholder="Email" onChange={(e)=>{setemail(e.target.value)}}/>
-            <Input style={{margin:"2px"}}  type="password"  placeholder="Password" onChange={(e)=>{setpassword(e.target.value)}}/>
-            <input style={{margin:"2px",display:"none"}}  type="file" accept='image/' id="image" onChange={(e)=>postdetails(e.target.files[0])}/>
-            <label htmlFor="image" style={{display:"flex",color:"cyan"}}><img style={{width:"30px",height:"30px",borderRadius:"20%",padding:"0 2px"}} src="https://media.gettyimages.com/vectors/camera-vector-illustration-vector-id466881028?b=1&k=6&m=466881028&s=170x170&h=EikGCs9NUn4pIBLV3ljW3ImXkbb0TK8hnI_dfI92E9Y=" alt='img'></img> Add an avatar</label>
-            <button style={{margin:"10px auto 10px auto ",display:"flex",flexDirection:"column",alignItems:"center",background:"cyan"}} onClick={submitHandler} >Sign Up</button>
-             <p> You do have an account?  <Link to="/login">Login</Link></p>           
-            </form>
-         </div>
-    )   
-};
+
+  return (
+    <Container>
+        <Wrapper>
+            {/* <Heading>Lamasocial</Heading> */}
+            {/* <Content> */}
+                <img src="https://du0ulnyus7r80.cloudfront.net/wp-content/uploads/2020/02/application-maintance.png"/>
+            {/* </Content> */}
+        </Wrapper>
+        <Wrapper2>
+            <Form type="submit" onSubmit={handleSubmit}>
+                
+            <h1 style={{fontFamily:"cursive",color:"blue"}}>EASE CHAT</h1>
+                <Input type='text' placeholder='Username' ref={username}/>
+                <Input type='Email' placeholder='Email' ref={email}/>
+                  <Input type='password' placeholder='Password' ref={password}/>
+                    <Button type="submit">
+                        Sign Up
+                    </Button>
+                    <Link to="/login">
+                    <Btn>
+                       Log in with an existing account
+                    </Btn>
+                    </Link>
+            </Form>
+            </Wrapper2>
+    </Container>
+  )
+}
+
 export default Register;
