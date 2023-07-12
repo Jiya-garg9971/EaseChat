@@ -39,7 +39,7 @@ const authdetails=async(req,res)=>{
     const userexist=await User.findOne({email});
     console.log(userexist);
     if(userexist){ //verify whether password is also same by decrypting it.
-        res.status(200).json({
+        res.status(201).json({
            _id:userexist._id,
             name:userexist.name,
             email:userexist.email,
@@ -54,15 +54,13 @@ const authdetails=async(req,res)=>{
     }
 }
 const allUsers=asyncHandler(async(req,res)=>{
-    console.log("get all user"); 
     const keyword=req.query.search?{
         $or :[
-            {name:{$regex:req.query.search,$options:"i"}}, {email:{$regex:req.query.search,$options:"i"}},
+            {name:{$regex:req.query.search,$options:"i"}},
+            {email:{$regex:req.query.search,$options:"i"}},
         ],
     }:{};
-     console.log(keyword);
-    const users=await User.find(keyword).find({ _id: { $ne: req.user?._id } }); // yahan kuch garbad h in _id (? put karne par garbad resolve ho gyi)
-    res.send(users);
-    console.log(keyword);
+    const users=await User.find(keyword).find({ _id: { $ne: req.user._id } }); // yahan  par woh protect kaam kar rha h
+    res.json(users);
 });
 export {Registeruser,authdetails,allUsers};

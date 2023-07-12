@@ -1,0 +1,132 @@
+.container1 {
+  display: flex;
+  background-color: white;
+  justify-content: space-between;
+  /* align-items: center; */
+  min-height: 40px;
+  max-width: 100vw;
+  max-height: 50px;
+  /* padding: 4px; */
+}
+.app-name {
+  display: flex;
+  align-items: center;
+}
+.searchbar {
+  display: flex;
+  border: 1px solid #ccc;
+  align-items: center;
+  padding: 5px;
+  border-radius: 50px;
+}
+.icon2 {
+  width: 30px;
+  height: 30px;
+  padding-right: 20px;
+}
+.rightbar {
+  display: flex;
+  align-items: center;
+}
+.searchbar input {
+  border: none;
+  outline: none;
+  padding: 5px;
+  font-weight: bolder;
+}
+.Nav-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+}
+.img2 {
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+}
+
+.Chat-content {
+  position: absolute;
+}
+.ProfileCard {
+  position: relative;
+  top: 10vh;
+  left: 35vw;
+  background-color: white;
+  border: 2px solid grey;
+  width: 50vh;
+  min-height: 50vh;
+  text-align: center;
+  /* margin: auto; */
+  font-size: larger;
+}
+.close-btn {
+  background-color: #17a9fd;
+  color: white;
+  border: none;
+  font-weight: bolder;
+  padding: 10px 20px;
+  border-radius: 50px;
+}
+button {
+  border: none;
+  background-color: rgb(236, 232, 232);
+  border-radius: 50px;
+}
+.profile-box {
+  background-color: white;
+  position: relative;
+  left: 80vw;
+  min-width: 15vw;
+  padding: 10px;
+  border: grey;
+  box-shadow: 2px 2px 2px 2px grey;
+}
+
+.profile-box1 {
+  display: flex;
+  flex-direction: column;
+}
+.profile-box1 button {
+  border: none;
+  border-bottom: 1px solid rgb(238, 232, 232);
+  background-color: white;
+  min-width: 15vw;
+  font-weight: bolder;
+  padding: 4px;
+}
+.x-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(234, 62, 62);
+  border-radius: 50px;
+  min-width: 20px;
+  margin: 10px;
+  padding: 3px;
+}
+.x-btn:hover {
+  box-shadow: 1px 1px 1px 1px 1px red;
+}
+.searchboxcomp {
+  /* display: block; */
+  min-width: 30vw;
+  height: 100vh;
+  color: black;
+  margin: 0px;
+  padding: 10px;
+  background-color: white;
+  border: 2px solid green;
+  transition: width 2s, height 4s;
+}
+.with-close {
+  display: flex;
+  justify-content: space-between;
+}
+.user-box {
+  border: 2px solid rgb(224, 228, 231);
+  background-color: rgb(248, 247, 247);
+  border-radius: 50px;
+  padding: 2px 20px;
+  margin-top: 2px;
+}

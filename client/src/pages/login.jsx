@@ -104,11 +104,13 @@ const Login = () => {
                 password:password.current.value,
             }
         try{
-            const {res}=await axios.post("/api/user/login",user);
-            console.log(res);
+            const res=await axios.post("/api/user/login",user);
+            console.log("response is",res);
             localStorage.setItem("userInfo", JSON.stringify(res));
-            navigate("/chat");
+            // console.log(res);
             toast.success("Login successful");
+            
+            navigate("/chat");
         }
         catch(err){
             console.log(err.response.data);

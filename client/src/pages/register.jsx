@@ -97,7 +97,6 @@ const Register = () => {
         };
         try{
             const res = await axios.post("/api/user", user);
-            
             toast.success("Registeation Successfull");
         localStorage.setItem("userInfo", JSON.stringify(res));
             console.log(res);
